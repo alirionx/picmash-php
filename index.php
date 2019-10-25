@@ -34,11 +34,19 @@ $curPath = parse_url($curUrl, PHP_URL_PATH);
 //echo $curPath;
 //--------------------------------------------------------------------------------------
 
+//-Maintenance Mode-----------------------
+
+//$_SESSION['adm'] = true;
+
+//----------------------------------------
+
 
 //---The URL Router---------------------------------------------------------------------
 
 $pathArray = [
     '\/' => 'view_appFrame',
+    '\/api\/menu\/get' => 'menueGet',
+    '\/api\/mash\/get' => 'mashGet',
     '\/test\/api\/table\/get\/(.*)' => 'api_tableGet',
 ];
 
