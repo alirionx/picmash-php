@@ -44,6 +44,7 @@ $pathArray = [
     '\/api\/pic\/download\/(.*)' => 'picDownload',
     '\/api\/pic\/reset' => 'picReset',
     '\/api\/pic\/delete' => 'picDelete',
+    '\/api\/pic\/upload' => 'picUpload',
 ];
 
 $keys = array_map('strlen', array_keys($pathArray));

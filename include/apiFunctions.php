@@ -194,6 +194,45 @@ function picDelete(){
     ");
 }
 
+//--------------------
+
+function picUpload(){
+
+    $db = $GLOBALS['db'];
+    $picSysPath = $GLOBALS['picSysPath'];
+    
+    $mimeAry = [];
+    $mimeAry["image/jpeg"] = "jpg";
+    $mimeAry["image/png"] = "png";
+
+    print_r($_FILES['fileToUpload']);
+
+    $FileCnt = count($_FILES['fileToUpload']['name']);
+    for ($i = 0; $i < $FileCnt; $i++) {
+        $dbQry = $db->query("
+            INSERT INTO mash DEFAULT VALUES ;
+        ");
+        $dbQry = $db->query("
+            SELECT last_insert_rowid() as lir;
+        ");
+        $row = $dbQry->fetchArray(SQLITE3_ASSOC);
+        $lir = $row['lir'];
+        
+        $isMime = $mimeAry[$_FILES['fileToUpload']['type'][$i]];
+
+        if (move_uploaded_file($_FILES['fileToUpload']['tmp_name'][$i], $picSysPath.'image_'.$lir.'.'.$isMime)) {
+            $dbQry = $db->query("
+                UPDATE mash set filename = 'image_$lir.$isMime' WHERE id = $lir;
+            ");
+        } 
+        else {
+            $dbQry = $db->query("
+                DELETE FROM mash WHERE id = $lir;
+            ");
+        }
+    }    
+}
+
 //--------------------------------------------------------------------------
 
 ?>

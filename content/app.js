@@ -67,6 +67,9 @@ function callRating(paras){
 }
 
 function callUpload(paras){
+
+    menuCall();
+
     var url = "/api/upload/get";
     var method = "GET";
 
@@ -171,5 +174,27 @@ function bgRequest(method, url, fData, callBack=false){
     xhttp.open(method, url, true);
     xhttp.send(fData);
 }
+
+//---------------------------------
+
+function loaderCall(target=document.body){
+		
+    var blocker = document.createElement("div");
+    blocker.classList.add("blocker");
+
+    var loader_frame = document.createElement("div");
+    loader_frame.classList.add("spinner");
+
+    for (var i = 1; i < 4; i++) {
+
+        var loader_bounce = document.createElement("div");
+        loader_bounce.classList.add("bounce"+i);
+        loader_frame.appendChild(loader_bounce);
+    }
+
+    blocker.appendChild(loader_frame);
+    target.appendChild(blocker);
+}
+
 
 //-----------------------------------------------------------------------------
