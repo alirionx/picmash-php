@@ -4,16 +4,6 @@
 
 $baseURL = '/';
     
-//-SQLite3--------
-//Module "php-sqlite3" must be installed/enabled
-//$db = new SQLite3('db/example.db');
-    
-//-MySQL----------
-//Module "php-mysql" must be installed/enabled
-//$dbHost = "localhost";
-//$dbUser = "username";
-//$dbPassword = "password";
-//$db = new mysqli($dbHost, $dbUser, $dbPassword);
 //--------------------------------------------------------------------------------------
 
 
@@ -28,6 +18,8 @@ include 'include/apiFunctions.php';
 //---Some Globals and Initiators--------------------------------------------------------
 
 session_start();
+$_SESSION['adm'] = false;
+
 $curHost = $_SERVER['SERVER_NAME'];
 $curUrl  = $_SERVER['REQUEST_URI'];
 $curPath = parse_url($curUrl, PHP_URL_PATH);
@@ -36,7 +28,7 @@ $curPath = parse_url($curUrl, PHP_URL_PATH);
 
 //-Maintenance Mode-----------------------
 
-//$_SESSION['adm'] = true;
+$_SESSION['adm'] = true;
 
 //----------------------------------------
 
@@ -47,7 +39,11 @@ $pathArray = [
     '\/' => 'view_appFrame',
     '\/api\/menu\/get' => 'menueGet',
     '\/api\/mash\/get' => 'mashGet',
-    '\/test\/api\/table\/get\/(.*)' => 'api_tableGet',
+    '\/api\/mash\/vote' => 'mashVote',
+    '\/api\/rating\/get' => 'ratingGet',
+    '\/api\/pic\/download\/(.*)' => 'picDownload',
+    '\/api\/pic\/reset' => 'picReset',
+    '\/api\/pic\/delete' => 'picDelete',
 ];
 
 $keys = array_map('strlen', array_keys($pathArray));
