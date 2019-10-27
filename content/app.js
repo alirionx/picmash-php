@@ -279,7 +279,7 @@ function bgRequest(method, url, fData, callBack=false){
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             
-            console.clear();
+            //console.clear();
             console.log(xhttp.responseText);
             if(callBack!=false){
                 var obj = jsonToObj(xhttp.responseText);

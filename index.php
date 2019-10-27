@@ -1,5 +1,16 @@
 <?php
 
+//---App Init---------------------------------------------------------------------------
+
+$curDir = getcwd();
+$dbPath = $curDir . '/db/picmash.db';
+
+if( !file_exists($dbPath) ){
+    $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === 0 ? 'https://' : 'http://';
+    header("Location: " . $protocol . $_SERVER['HTTP_HOST'] . "/init" );
+    die();
+}
+
 //---App Config-------------------------------------------------------------------------
 
 $baseURL = '/';
@@ -28,7 +39,7 @@ $curPath = parse_url($curUrl, PHP_URL_PATH);
 
 //-Maintenance Mode-----------------------
 
-//$_SESSION['adm'] = true;
+$_SESSION['adm'] = true;
 
 //----------------------------------------
 

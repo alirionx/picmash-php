@@ -141,7 +141,7 @@ function mgmt_ResAppCall(){
     var fData = new FormData();
     var fwFunc = function(){
         var msgTxt = "WebApp successfully reseted";
-        var mgsFunc = msgBoxCall(msgTxt, logOut);
+        var mgsFunc = msgBoxCall(msgTxt, function(){location.href = "/";});
         bgRequest("POST", "/api/mgmt/resapp", fData, mgsFunc);
     }
 
