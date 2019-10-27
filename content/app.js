@@ -4,7 +4,8 @@ var path2func = {
     '\/mash': callMash, 
     '\/rating': callRating, 
     '\/upload': callUpload, 
-    '\/mgmt': callMgmt, 
+    '\/mgmt': callMgmt,
+    '\/login': callLogin,
     '\/example\/(.*)': callExample
 }
 
@@ -87,6 +88,16 @@ function callMgmt(paras){
     scriptTag.onreadystatechange = callBack;
 }
 
+function callLogin(paras){
+
+    menuCall();
+
+    var callBack = function(){ buildLogin(); } 
+    var scriptTag = appendScript("content/login.js");
+    scriptTag.onload = callBack;
+    scriptTag.onreadystatechange = callBack;
+}
+
 //-------------------------------------------------------------------
 
 
@@ -97,6 +108,8 @@ function menuCall(){
 }
 
 function menuBuild(obj){
+
+    rmByClass("menuBar");
     var headBlock = document.getElementById("headBlock");
 
     var menuBar = document.createElement("DIV");
@@ -200,6 +213,15 @@ mkLnk["hash"] = function(btn, lnk){
         location.hash = lnk;
     }
 }
+mkLnk["func"] = function(btn, lnk){
+    btn.onclick = function(){
+        mFwFuncAry[lnk]();
+    }
+}
+
+var mFwFuncAry = [];
+mFwFuncAry["logout"] = logOut;
+
 
 function rmByClass(clName, callBack=false){
     
@@ -269,6 +291,9 @@ function bgRequest(method, url, fData, callBack=false){
         if (this.readyState == 4 && ( staStr.startsWith("4") || staStr.startsWith("5") ) ){
             msgBoxCall("Background API Request went wrong", function(){ location.reload();} );
         }
+        if (this.readyState == 4 && this.status == 303) {
+            msgBoxCall("Wrong Password", function(){ location.hash = "/mash";} );
+        }
     };
     xhttp.open(method, url, true);
     xhttp.send(fData);
@@ -293,6 +318,19 @@ function loaderCall(target=document.body){
 
     blocker.appendChild(loader_frame);
     target.appendChild(blocker);
+}
+
+//---------------------------------
+
+function logOut(){
+
+    var msgTxt = "Do you really want to leave the admin mode?" 
+    var fwFunc = function(){
+        var fData = new FormData();
+        var fwFunc2 = function(){location.href = "/";} 
+        bgRequest("POST", "/api/logout", fData, fwFunc2);
+    }
+    confirmBoxCall(msgTxt, fwFunc);
 }
 
 

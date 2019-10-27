@@ -23,7 +23,7 @@ function buildUpload(){
     fileInput.id = "UploadFileInput";
     fileInput.type = "file";
     fileInput.setAttribute ("multiple", "multiple");
-    fileInput.setAttribute ("accept", ".jpg,.jpeg,.png");
+    fileInput.setAttribute ("accept", "image/png,image/jpeg");
     fileInput.style.display = "none";
     fileInput.onchange = function(){
 

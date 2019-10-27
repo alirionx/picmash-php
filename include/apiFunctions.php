@@ -198,6 +198,8 @@ function picDelete(){
 
 function picUpload(){
 
+    chkAdm();
+
     $db = $GLOBALS['db'];
     $picSysPath = $GLOBALS['picSysPath'];
     
@@ -237,6 +239,8 @@ function picUpload(){
 
 function mgmtAdmPwd(){
 
+    chkAdm();
+
     $db = $GLOBALS['db'];
 
     $newAdmPwd = $_POST['newAdmPwd'];
@@ -253,6 +257,8 @@ function mgmtAdmPwd(){
 
 function mgmtResRating(){
 
+    chkAdm();
+
     $db = $GLOBALS['db'];
 
     $dbQry = $db->query("
@@ -262,7 +268,11 @@ function mgmtResRating(){
     echo '{"state": true}';
 }
 
+//-----------------------------
+
 function mgmtDelPics(){
+
+    chkAdm();
 
     $db = $GLOBALS['db'];
     $picSysPath = $GLOBALS['picSysPath'];
@@ -271,15 +281,76 @@ function mgmtDelPics(){
         DELETE FROM mash;
     ");
 
-
     $files = glob($picSysPath.'*'); 
     foreach($files as $file){
-        if(is_file($file){ unlink($file); }
+        if(is_file($file)){ unlink($file); }
     }
 
     echo '{"state": true}';
 }
 
+function mgmtResApp(){
+
+    chkAdm();
+
+    $dbDir = getcwd() . '\/db\/';
+    $picSysPath = $GLOBALS['picSysPath'];
+    
+    $files = glob($picSysPath.'*'); 
+    foreach($files as $file){
+        if(is_file($file)){ unlink($file); }
+    }
+    rmdir($picSysPath);
+    
+    $files = glob($dbDir.'*'); 
+    foreach($files as $file){
+        if(is_file($file)){ unlink($file); }
+    }
+    rmdir($dbDir);
+
+    echo '{"state": true}';
+}
+
+//--------------------------------------------------------------------------
+
+function chkAdm(){
+
+    if( $_SESSION['adm'] != true){
+        echo "Function Unauthorized";
+        header("HTTP/1.0 401 Unauthorized");
+        return;
+    }
+}
+
+//--------------------------------------------------------------------------
+
+function logIn(){
+    
+    $db = $GLOBALS['db'];
+    $AdmPwd = $_POST['AdmPwd'];
+    
+    $dbQry = $db->query("
+        SELECT val FROM mgmt WHERE key = 'adminpwdhash';
+    ");
+    $row = $dbQry->fetchArray(SQLITE3_ASSOC);
+    $AdmPwdHash = $row['val'];
+
+    if (password_verify($AdmPwd, $AdmPwdHash)) {
+        $_SESSION['adm'] = true;
+    } 
+    else {
+        echo "Wrong Password";
+        header("HTTP/1.0 303 See Other");
+    }
+}
+
+//--------------------
+
+function logOut(){
+    $_SESSION['adm'] = false;
+    session_unset();
+    session_destroy();
+}
 
 
 //--------------------------------------------------------------------------

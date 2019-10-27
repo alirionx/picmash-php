@@ -18,7 +18,7 @@ include 'include/apiFunctions.php';
 //---Some Globals and Initiators--------------------------------------------------------
 
 session_start();
-$_SESSION['adm'] = false;
+//$_SESSION['adm'] = false;
 
 $curHost = $_SERVER['SERVER_NAME'];
 $curUrl  = $_SERVER['REQUEST_URI'];
@@ -28,7 +28,7 @@ $curPath = parse_url($curUrl, PHP_URL_PATH);
 
 //-Maintenance Mode-----------------------
 
-$_SESSION['adm'] = true;
+//$_SESSION['adm'] = true;
 
 //----------------------------------------
 
@@ -48,6 +48,9 @@ $pathArray = [
     '\/api\/mgmt\/admpwd' => 'mgmtAdmPwd',
     '\/api\/mgmt\/resrating' => 'mgmtResRating',
     '\/api\/mgmt\/delpics' => 'mgmtDelPics',
+    '\/api\/mgmt\/resapp' => 'mgmtResApp',
+    '\/api\/login' => 'logIn',
+    '\/api\/logout' => 'logOut',
 ];
 
 $keys = array_map('strlen', array_keys($pathArray));
@@ -86,6 +89,10 @@ function arrayToJSON($array, $pretty=false){
     }
     return $resJSON;
 }
+
+//-------------------------
+
+
 //--------------------------------------------------------------------------------------
 
 

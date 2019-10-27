@@ -138,6 +138,15 @@ function mgmt_DelPicsCall(){
 
 function mgmt_ResAppCall(){
 
+    var fData = new FormData();
+    var fwFunc = function(){
+        var msgTxt = "WebApp successfully reseted";
+        var mgsFunc = msgBoxCall(msgTxt, logOut);
+        bgRequest("POST", "/api/mgmt/resapp", fData, mgsFunc);
+    }
+
+    var msgTxt = "Do you really want to reset the whole WebApp???";
+    confirmBoxCall(msgTxt, fwFunc);
 }
 
 //-------------------
