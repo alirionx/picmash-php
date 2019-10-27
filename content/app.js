@@ -4,6 +4,7 @@ var path2func = {
     '\/mash': callMash, 
     '\/rating': callRating, 
     '\/upload': callUpload, 
+    '\/mgmt': callMgmt, 
     '\/example\/(.*)': callExample
 }
 
@@ -70,11 +71,18 @@ function callUpload(paras){
 
     menuCall();
 
-    var url = "/api/upload/get";
-    var method = "GET";
-
     var callBack = function(){ buildUpload(); } 
     var scriptTag = appendScript("content/upload.js");
+    scriptTag.onload = callBack;
+    scriptTag.onreadystatechange = callBack;
+}
+
+function callMgmt(paras){
+
+    menuCall();
+
+    var callBack = function(){ buildMgmt(); } 
+    var scriptTag = appendScript("content/mgmt.js");
     scriptTag.onload = callBack;
     scriptTag.onreadystatechange = callBack;
 }
@@ -107,6 +115,79 @@ function menuBuild(obj){
 
 
 //-Little Helpers--------------------------------------------------------------
+
+function msgBoxCall(msgTxt, callBack = function(){}){
+    
+    var target = blockerCall();
+
+    var FormHlTxt = "System Message";
+
+    var stdForm = document.createElement("DIV");
+    target.appendChild(stdForm);
+    stdForm.classList.add("stdForm");
+    stdForm.style.position = "relative";
+    stdForm.style.top = "20vh";
+
+    var FormHl = document.createElement("DIV");
+    stdForm.appendChild(FormHl);
+    FormHl.setAttribute("css", "hl");
+    FormHl.innerHTML = FormHlTxt;
+
+    var msgBox = document.createElement("DIV");
+    stdForm.appendChild(msgBox);
+    msgBox.setAttribute("css", "msgBox");
+    msgBox.innerHTML = msgTxt;
+
+    var okBtn = document.createElement("BUTTON");
+    stdForm.appendChild(okBtn);
+    okBtn.innerHTML = "Ok";
+    okBtn.onclick = function(){
+        rmByClass("blocker");
+        this.parentNode.parentNode.removeChild(this.parentNode);
+        callBack();
+    }
+}
+
+function confirmBoxCall(msgTxt, fwFunc){
+    
+    var target = blockerCall();
+
+    var FormHlTxt = "System Confirmation";
+
+    var stdForm = document.createElement("DIV");
+    target.appendChild(stdForm);
+    stdForm.classList.add("stdForm");
+    stdForm.style.position = "relative";
+    stdForm.style.top = "20vh";
+
+    var FormHl = document.createElement("DIV");
+    stdForm.appendChild(FormHl);
+    FormHl.setAttribute("css", "hl");
+    FormHl.innerHTML = FormHlTxt;
+
+    var msgBox = document.createElement("DIV");
+    stdForm.appendChild(msgBox);
+    msgBox.setAttribute("css", "msgBox");
+    msgBox.innerHTML = msgTxt;
+
+    var okBtn = document.createElement("BUTTON");
+    stdForm.appendChild(okBtn);
+    okBtn.innerHTML = "Ok";
+    okBtn.onclick = function(){
+        rmByClass("blocker");
+        this.parentNode.parentNode.removeChild(this.parentNode);
+        fwFunc();
+    }
+
+    var cancelBtn = document.createElement("BUTTON");
+    stdForm.appendChild(cancelBtn);
+    cancelBtn.innerHTML = "Cancel";
+    cancelBtn.onclick = function(){
+        rmByClass("blocker");
+        this.parentNode.parentNode.removeChild(this.parentNode);
+    }
+}
+
 
 var mkLnk = {};
 mkLnk["href"] = function(btn, lnk){
@@ -147,6 +228,18 @@ function jsonToObj(str){
 
 //---------------------------------
 
+function blockerCall(){
+    var containerTop = document.getElementById("containerTop");
+    
+    var blocker = document.createElement("DIV");
+    containerTop.appendChild(blocker);
+    blocker.classList.add("blocker");
+
+    return blocker;
+}
+
+//---------------------------------
+
 function appendScript(lnk){
     scriptTag = document.createElement("SCRIPT");
     scriptTag.src = lnk;
@@ -164,11 +257,17 @@ function bgRequest(method, url, fData, callBack=false){
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             
+            console.clear();
             console.log(xhttp.responseText);
             if(callBack!=false){
                 var obj = jsonToObj(xhttp.responseText);
                 callBack(obj);
             }
+        }
+        
+        var staStr = this.status.toString();
+        if (this.readyState == 4 && ( staStr.startsWith("4") || staStr.startsWith("5") ) ){
+            msgBoxCall("Background API Request went wrong", function(){ location.reload();} );
         }
     };
     xhttp.open(method, url, true);

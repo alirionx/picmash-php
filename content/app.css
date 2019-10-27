@@ -173,7 +173,8 @@ body{
 .stdForm{
     display: table;
     min-width: 500px;
-    margin:8vh auto auto auto;
+    max-width: 600px;
+    margin:6vh auto auto auto;
     padding:2%;
     background-color: #DDD;
     border-radius: 8px;
@@ -207,6 +208,20 @@ body{
     padding:4px;
     text-align: left;
 }
+.stdForm input[type=password]{
+    width: 80%;
+    padding:10px;
+    margin: 10px auto 10px auto;
+    text-align: center;
+    border-radius: 6px;
+    border: 1px solid #3e4b5e;
+    background-color: #FFF;
+    color:#3e4b5e;
+    font-size: 16px;
+}
+.stdForm input[type=password]:focus{
+    background-color:rgb(230, 243, 255)
+}
 
 .stdForm button{
     display:inline-block;
@@ -221,6 +236,37 @@ body{
     cursor:pointer;
 }
 .stdForm button:hover{
+    background-color: #361009;
+    border:1px solid #361009;
+}
+.stdForm div[css=msgBox]{
+    display: table;
+    margin: auto;
+    width:90%;
+    min-height: 60px;
+    padding:14px;
+    border-radius: 8px;
+    border: 1px solid #AAA;
+    background-color: #FFF;
+    color:#3e4b5e;
+    font-size: 16px;
+
+}
+
+
+.meinBtn{
+    padding:8px;
+    margin:30px auto auto auto;
+    width: 300px;
+	background-color: #772b1d;
+    color: #FFF;
+    font-size: 14px;
+    border:1px solid #361009;
+    border-radius: 10px;
+    cursor:pointer;
+    text-align: center;
+}
+.meinBtn:hover{
     background-color: #361009;
     border:1px solid #361009;
 }

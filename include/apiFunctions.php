@@ -235,4 +235,53 @@ function picUpload(){
 
 //--------------------------------------------------------------------------
 
+function mgmtAdmPwd(){
+
+    $db = $GLOBALS['db'];
+
+    $newAdmPwd = $_POST['newAdmPwd'];
+    $newAdmHash = password_hash($newAdmPwd, PASSWORD_DEFAULT);
+
+    $dbQry = $db->query("
+        UPDATE mgmt set val = '$newAdmHash' WHERE key = 'adminpwdhash';
+    ");
+
+    echo '{"state": true}';
+}
+
+//-----------------------------
+
+function mgmtResRating(){
+
+    $db = $GLOBALS['db'];
+
+    $dbQry = $db->query("
+        UPDATE mash set win = 0, loss = 0;
+    ");
+
+    echo '{"state": true}';
+}
+
+function mgmtDelPics(){
+
+    $db = $GLOBALS['db'];
+    $picSysPath = $GLOBALS['picSysPath'];
+
+    $dbQry = $db->query("
+        DELETE FROM mash;
+    ");
+
+
+    $files = glob($picSysPath.'*'); 
+    foreach($files as $file){
+        if(is_file($file){ unlink($file); }
+    }
+
+    echo '{"state": true}';
+}
+
+
+
+//--------------------------------------------------------------------------
+
 ?>

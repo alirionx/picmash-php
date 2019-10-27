@@ -45,6 +45,9 @@ $pathArray = [
     '\/api\/pic\/reset' => 'picReset',
     '\/api\/pic\/delete' => 'picDelete',
     '\/api\/pic\/upload' => 'picUpload',
+    '\/api\/mgmt\/admpwd' => 'mgmtAdmPwd',
+    '\/api\/mgmt\/resrating' => 'mgmtResRating',
+    '\/api\/mgmt\/delpics' => 'mgmtDelPics',
 ];
 
 $keys = array_map('strlen', array_keys($pathArray));
