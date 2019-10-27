@@ -36,7 +36,7 @@ if($curPath == '/api/init'){
         die();
     }
 
-    mkdir($curDir.'/db/pics');
+    mkdir($curDir.'/db/pics', 0755, true);
     $db = new SQLite3($dbPath);
 
     shell_exec('cat '.$dbDump.' | sqlite3 '.$dbPath);
@@ -47,7 +47,7 @@ if($curPath == '/api/init'){
     ");
     
     $_SESSION['adm'] = true;
-    
+
     header("Location: " . $protocol . $_SERVER['HTTP_HOST'] );
     die();
 }
