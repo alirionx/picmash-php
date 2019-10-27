@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="AppScape Playground - PicMash" content="width=device-width, initial-scale=1.0">        
+    <title>AppScape Playground - PicMash</title>
+    
+    <link rel="shortcut icon" href="content/gfx/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="content/gfx/favicon.ico" type="image/x-icon">
+    
+    <link rel="stylesheet" href="content/app.css"> 
+</head>
+               
+<body>
+    <div class="headBlock" id="headBlock">
+        <img css="logo" src="content/gfx/as-logo_small_white.png" />
+        <div css="hl">AppScape DemoApp - PicMash</div>
+    </div>
+    <form id="formElm" method="POST" action="/api/init" target="_self">
+        <div class="stdForm">
+            <div css="hl">WebApp Initialization</div>
+            <input type="password" name="newAdmPwd" id="newAdmPwdIpt" placeholder="set new admin password" />
+            <input type="password" id="repAdmPwdIpt" placeholder="repeat new admin password" />
+            <button id="FormSubmitBtn" type="button" onclick="submitAppInit(this.parentNode.parentNode);">Submit</button>
+        </div>
+    </form>
+</body>
+</html>
+
+
+<script>
+    document.body.onkeyup = function(ev){
+        if (ev.keyCode === 13) {
+            document.getElementById("FormSubmitBtn").click();
+        }
+    }
+    
+    function submitAppInit(formElm){
+        var newAdmPwdIpt = document.getElementById("newAdmPwdIpt");
+        var repAdmPwdIpt = document.getElementById("repAdmPwdIpt");
+        if(newAdmPwdIpt.value == "" || newAdmPwdIpt.value != repAdmPwdIpt.value){
+            repAdmPwdIpt.innerHTML = "";
+            repAdmPwdIpt.style.borderColor = "red";
+            setTimeout( function(){repAdmPwdIpt.style.borderColor = "#3e4b5e";}, 500 );
+            return null;
+        }
+        formElm.submit();
+    }
+</script>

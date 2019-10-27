@@ -66,7 +66,7 @@ function mgmt_ResPwdCall(){
     stdForm.appendChild(pwdIpt);
     pwdIpt.id = "repAdmPwdIpt";
     pwdIpt.type = "password";
-    pwdIpt.placeholder = "repeate new password";
+    pwdIpt.placeholder = "repeat new password";
 
     var submitBtn = document.createElement("BUTTON");
     stdForm.appendChild(submitBtn);

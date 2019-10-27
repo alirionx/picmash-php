@@ -1,20 +1,65 @@
 <?php
 
-//---App Init---------------------------------------------------------------------------
-
-$curDir = getcwd();
-$dbPath = $curDir . '/db/picmash.db';
-
-if( !file_exists($dbPath) ){
-    $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === 0 ? 'https://' : 'http://';
-    header("Location: " . $protocol . $_SERVER['HTTP_HOST'] . "/init" );
-    die();
-}
 
 //---App Config-------------------------------------------------------------------------
 
 $baseURL = '/';
     
+//--------------------------------------------------------------------------------------
+
+
+//---Some Globals and Initiators--------------------------------------------------------
+
+session_start();
+
+$curHost = $_SERVER['SERVER_NAME'];
+$curDir = getcwd();
+
+$dbPath = $curDir . '/db/picmash.db';
+$dbDump = $curDir . '/init/picmash.sql';
+
+$curUrl  = $_SERVER['REQUEST_URI'];
+$curPath = parse_url($curUrl, PHP_URL_PATH);
+
+//---App Init---------------------------------------------------------------------------
+
+if($curPath == '/api/init'){
+    
+    $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === 0 ? 'https://' : 'http://';
+
+    if( $_POST['newAdmPwd'] ){
+        $newAdmPwd = $_POST['newAdmPwd'];
+        $newAdmHash = password_hash($newAdmPwd, PASSWORD_DEFAULT);
+    }
+    else{
+        header("Location: " . $protocol . $_SERVER['HTTP_HOST'] );
+        die();
+    }
+
+    mkdir($curDir.'/db/pics');
+    $db = new SQLite3($dbPath);
+
+    shell_exec('cat '.$dbDump.' | sqlite3 '.$dbPath);
+    //$output = shell_exec('sqlite3 '.$dbPath.' < '.$dbPath);
+
+    $dbQry = $db->query("
+        UPDATE mgmt set val = '$newAdmHash' WHERE key = 'adminpwdhash';
+    ");
+    
+    $_SESSION['adm'] = true;
+    
+    header("Location: " . $protocol . $_SERVER['HTTP_HOST'] );
+    die();
+}
+
+//-------------------------
+
+if( !file_exists($dbPath) ){
+    require_once('include/viewFunctions.php');
+    view_initHtml();
+    die();
+}
+
 //--------------------------------------------------------------------------------------
 
 
@@ -26,20 +71,9 @@ include 'include/apiFunctions.php';
 //--------------------------------------------------------------------------------------
 
 
-//---Some Globals and Initiators--------------------------------------------------------
-
-session_start();
-//$_SESSION['adm'] = false;
-
-$curHost = $_SERVER['SERVER_NAME'];
-$curUrl  = $_SERVER['REQUEST_URI'];
-$curPath = parse_url($curUrl, PHP_URL_PATH);
-//echo $curPath;
-//--------------------------------------------------------------------------------------
-
 //-Maintenance Mode-----------------------
 
-$_SESSION['adm'] = true;
+//$_SESSION['adm'] = true;
 
 //----------------------------------------
 
