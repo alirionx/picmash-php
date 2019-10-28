@@ -10,10 +10,11 @@ $baseURL = '/';
 
 //---Some Globals and Initiators--------------------------------------------------------
 
-session_start();
-
 $curHost = $_SERVER['SERVER_NAME'];
 $curDir = getcwd();
+
+ini_set('session.save_path', $curDir.'/db');
+session_start();
 
 $dbPath = $curDir . '/db/picmash.db';
 $dbDump = $curDir . '/init/picmash.sql';
